@@ -38,10 +38,26 @@ async function remove(id) {
   return db.deleteProduct(id);
 }
 
+// PUBLIC_INTERFACE
+async function getBalance() {
+  /**
+   * Calculates the total inventory value (sum of price * quantity for all products).
+   * Returns a number (0 if there are no products).
+   */
+  const products = await db.listProducts();
+  return products.reduce((acc, p) => {
+    const price = typeof p.price === 'number' ? p.price : Number(p.price);
+    const qty = typeof p.quantity === 'number' ? p.quantity : Number(p.quantity);
+    if (!Number.isFinite(price) || !Number.isFinite(qty)) return acc;
+    return acc + price * qty;
+  }, 0);
+}
+
 module.exports = {
   list,
   get,
   create,
   update,
   remove,
+  getBalance,
 };

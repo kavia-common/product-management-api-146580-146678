@@ -95,6 +95,19 @@ class ProductsController {
       return error(res, 'Failed to delete product', err.status || 500);
     }
   }
+
+  // PUBLIC_INTERFACE
+  async balance(req, res) {
+    /** Returns the total value of goods in stock (sum of price * quantity for all products). */
+    try {
+      const total = await productsService.getBalance();
+      // Standard API format: wrap in data with a field name
+      return success(res, { balance: total }, 200);
+    } catch (err) {
+      console.error('[ProductsController:balance] Error:', err);
+      return error(res, 'Failed to compute products balance', err.status || 500);
+    }
+  }
 }
 
 module.exports = new ProductsController();
