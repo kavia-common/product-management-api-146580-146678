@@ -1,5 +1,6 @@
 const express = require('express');
 const healthController = require('../controllers/health');
+const productsRoutes = require('./products');
 
 const router = express.Router();
 // Health endpoint
@@ -31,5 +32,8 @@ const router = express.Router();
  *                   example: development
  */
 router.get('/', healthController.check.bind(healthController));
+
+// Mount products routes at /products
+router.use('/products', productsRoutes);
 
 module.exports = router;
